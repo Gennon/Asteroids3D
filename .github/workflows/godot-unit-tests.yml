@@ -7,15 +7,22 @@ on:
             - "**.gd"
 
 jobs:
-    execute-gut:
-        name: Run GUT tests
+    execute-tests:
+        name: Run tests
         runs-on: ubuntu-latest
+        container:
+            image: barichello/godot-ci:4.2.1
         steps:
             - name: Checkout
               uses: actions/checkout@v2
-
-            - name: Docker test
-              uses: ceceppa/godot-gut-ci@main
               with:
-                  godot_version: 4.2.1
-                  gut_params: -gdir=res://scripts -gsuffix=.test.gd -gprefix=
+                  lfs: true
+
+            - name: Setup
+              run: |
+                  mkdir -v -p ~/.local/share/godot/templates
+                  mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
+
+            - name: Testing
+              run: |
+                  godot --headless -v -e -q --path . -s addons/gut/gut_cmdln.gd -gdir=res://scripts -gsuffix=.test.gd -gprefix=
