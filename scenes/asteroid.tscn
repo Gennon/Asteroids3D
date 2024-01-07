@@ -1,0 +1,31 @@
+[gd_scene load_steps=8 format=3 uid="uid://trj07pqtoofa"]
+
+[ext_resource type="PackedScene" uid="uid://fbfu5p4qnrfl" path="res://assets/models/asteroid.blend" id="1_fii1h"]
+[ext_resource type="Shader" path="res://assets/materials/asteroid.gdshader" id="2_cl7ni"]
+[ext_resource type="Script" path="res://scripts/asteroid.gd" id="2_yquha"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_37f7b"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tpbth"]
+noise = SubResource("FastNoiseLite_37f7b")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_niy2v"]
+render_priority = 0
+shader = ExtResource("2_cl7ni")
+shader_parameter/scale = Vector3(0.225, 0.44, 0.43)
+shader_parameter/color = Color(0.2, 0.2, 0.2, 1)
+shader_parameter/noise = SubResource("NoiseTexture2D_tpbth")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nocp4"]
+radius = 0.833362
+height = 3.45083
+
+[node name="Asteroid" instance=ExtResource("1_fii1h")]
+script = ExtResource("2_yquha")
+
+[node name="AsteroidMesh" parent="." index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_niy2v")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_nocp4")
