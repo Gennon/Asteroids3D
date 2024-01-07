@@ -5,6 +5,7 @@ on:
             - "**.test.gd"
             - "**.tscn"
             - "**.gd"
+            - "**.yml"
 
 jobs:
     execute-tests:
