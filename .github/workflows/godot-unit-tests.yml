@@ -19,11 +19,6 @@ jobs:
               with:
                   lfs: true
 
-            - name: Setup
-              run: |
-                  mkdir -v -p ~/.local/share/godot/templates
-                  mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
-
             - name: Testing
               run: |
-                  godot --headless -v -e -q --path . -s addons/gut/gut_cmdln.gd -gdir=res://scripts -gsuffix=.test.gd -gprefix=
+                  godot --headless -v -e --quit -s res://addons/gut/gut_cmdln.gd -gdir=res://scripts -gsuffix=.test.gd -gprefix=
