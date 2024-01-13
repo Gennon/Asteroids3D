@@ -3,6 +3,7 @@ extends GutTest
 var Asteroid = load("res://scripts/asteroid.gd")
 var Scene = load("res://scenes/asteroid.tscn")
 
+
 func test_asteroid_exists():
   var asteroid = double(Asteroid).new()
   assert_true(asteroid != null)
@@ -15,7 +16,7 @@ func test_asteroid_moves_forward():
   simulate(asteroid, 10, 0.1)
   # The asteroid should have moved forward from its initial position
   assert_not_same(asteroid.global_position.z, initial_position.z)
-  
+
 
 func test_asteroid_moves_forward_with_speed():
   var asteroid = partial_double(Scene).instantiate()
@@ -58,7 +59,7 @@ func test_asteroid_rotates_with_rotation_speed():
   # The rotation of the asteroid with rotation speed 2 should be greater
   # than the rotation of the asteroid with rotation speed 1
   assert_gt(abs(asteroid.rotation), abs(second_rotation))
-  
+
 
 func test_asteroid_is_big_by_default():
   var asteroid = partial_double(Scene).instantiate()
@@ -73,3 +74,61 @@ func test_big_astroid_has_larger_scale():
   asteroid_small.is_big = false
   add_child(asteroid_small)
   assert_gt(asteroid_big.scale, asteroid_small.scale)
+
+
+func test_big_asteroid_will_split_on_hit():
+  var asteroid = partial_double(Scene).instantiate()
+  add_child(asteroid)
+  asteroid.is_big = true
+  asteroid.hit()
+  await wait_frames(2)
+  # The asteroid should have split into smaller asteroids
+  var asteroids = get_tree().get_nodes_in_group("asteroid")
+  assert_gt(asteroids.size(), 1)
+  for a in asteroids:
+    assert_false(a.is_big)
+    a.queue_free()
+
+
+func test_small_asteroid_will_destroy_on_hit():
+  var asteroid = partial_double(Scene).instantiate()
+  add_child(asteroid)
+  asteroid.is_big = false
+  await wait_frames(2)
+  asteroid.hit()
+  await wait_frames(2)
+  # The asteroid should have been removed from the scene
+  assert_freed(asteroid)
+
+
+func test_big_asteroid_will_instanciate_effect_on_hit():
+  var asteroid = partial_double(Scene).instantiate()
+  add_child(asteroid)
+  asteroid.is_big = true
+  asteroid.hit()
+  await wait_frames(2)
+  # The asteroid should have instanciated an effect
+  var effect_found = false
+  for child in get_children():
+    if child is GPUParticles3D:
+      effect_found = true
+    child.queue_free()
+  await wait_frames(2)
+  assert_true(effect_found, "Effect found")
+
+
+func test_small_asteroid_will_instanciate_effect_on_hit():
+  var asteroid = partial_double(Scene).instantiate()
+  add_child(asteroid)
+  asteroid.is_big = false
+  asteroid.hit()
+  await wait_frames(2)
+  # The asteroid should have instanciated an effect
+  var effect_found = false
+  for child in get_children():
+    if child is GPUParticles3D:
+      effect_found = true
+    child.queue_free()
+  await wait_frames(2)
+  assert_true(effect_found, "Effect found")
+	

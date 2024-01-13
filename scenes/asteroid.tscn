@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://trj07pqtoofa"]
+[gd_scene load_steps=9 format=3 uid="uid://trj07pqtoofa"]
 
 [ext_resource type="PackedScene" uid="uid://fbfu5p4qnrfl" path="res://assets/models/asteroid.blend" id="1_fii1h"]
 [ext_resource type="Shader" path="res://assets/materials/asteroid.gdshader" id="2_cl7ni"]
 [ext_resource type="Script" path="res://scripts/asteroid.gd" id="2_yquha"]
+[ext_resource type="PackedScene" uid="uid://yjnrpiausmmb" path="res://scenes/explosion.tscn" id="3_ibt0b"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_37f7b"]
 
@@ -20,8 +21,9 @@ shader_parameter/noise = SubResource("NoiseTexture2D_tpbth")
 radius = 0.833362
 height = 3.45083
 
-[node name="Asteroid" instance=ExtResource("1_fii1h")]
+[node name="Asteroid" groups=["asteroid"] instance=ExtResource("1_fii1h")]
 script = ExtResource("2_yquha")
+explosion = ExtResource("3_ibt0b")
 
 [node name="AsteroidMesh" parent="." index="0"]
 surface_material_override/0 = SubResource("ShaderMaterial_niy2v")
