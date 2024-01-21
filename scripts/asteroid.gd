@@ -5,7 +5,7 @@ signal destroyed
 @export var explosion: PackedScene = load("res://scenes/explosion.tscn")
 
 @export_category("Configuration")
-@export var speed := 5.0
+@export var speed_variation := Vector2(2, 5)
 @export var rotation_speed := 0.5
 @export var scale_factor := 0.2
 @export var color_factor := 0.2
@@ -14,6 +14,7 @@ var scene := load("res://scenes/asteroid.tscn")
 var color = Color(0.3, 0.3, 0.3, 1)
 var is_big := true
 var direction := Vector3(0, 0, 0)
+var speed = 5.0
  
 
 func _ready():
@@ -30,6 +31,9 @@ func _ready():
 
 	# sets random direction
 	direction = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
+
+	# sets random speed
+	speed = randf_range(speed_variation.x, speed_variation.y)
 
 
 func _process(delta):

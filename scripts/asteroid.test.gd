@@ -168,3 +168,16 @@ func test_asteroids_should_move_in_random_direction():
   simulate(asteroid1, 2, 0.1)
   simulate(asteroid2, 2, 0.1)
   assert_not_same(asteroid1.global_position, asteroid2.global_position)
+
+
+func test_asteroids_should_move_with_different_speed():
+  var asteroid1 = partial_double(Scene).instantiate()
+  var asteroid2 = partial_double(Scene).instantiate()
+  add_child(asteroid1)
+  add_child(asteroid2)
+  # Setting the same direction for both asteroids
+  asteroid1.direction = Vector3(0, 0, 1)
+  asteroid2.direction = Vector3(0, 0, 1)
+  simulate(asteroid1, 2, 1)
+  simulate(asteroid2, 2, 1)
+  assert_not_same(asteroid1.global_position.z, asteroid2.global_position.z)
