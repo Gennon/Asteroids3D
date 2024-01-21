@@ -147,3 +147,14 @@ func test_asteroids_should_have_different_colors():
   add_child(asteroid1)
   add_child(asteroid2)
   assert_not_same(asteroid1.color, asteroid2.color)
+
+
+func test_asteroid_should_emit_signal_on_hit():
+  var asteroid = partial_double(Scene).instantiate()
+  add_child_autoqfree(asteroid)
+  watch_signals(asteroid)
+  asteroid.hit()
+  assert_signal_emitted(asteroid, "destroyed")
+  for child in get_children():
+    child.queue_free()
+  await wait_frames(1)

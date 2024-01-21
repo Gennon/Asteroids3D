@@ -1,5 +1,7 @@
 extends Area3D
 
+signal destroyed
+
 @export var explosion: PackedScene = load("res://scenes/explosion.tscn")
 
 @export_category("Configuration")
@@ -35,6 +37,7 @@ func _process(delta):
 ## Spawn 1-3 new asteroids when hit if big
 ## Just destroy if small
 func hit():
+	destroyed.emit()
 	spawn_explosion()
 	if is_big:
 		spawn_small_asteroids()
