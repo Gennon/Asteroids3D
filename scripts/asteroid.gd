@@ -13,6 +13,7 @@ signal destroyed
 var scene := load("res://scenes/asteroid.tscn")
 var color = Color(0.3, 0.3, 0.3, 1)
 var is_big := true
+var direction := Vector3(0, 0, 0)
  
 
 func _ready():
@@ -27,9 +28,12 @@ func _ready():
 	color += Color(random_color_variance, random_color_variance, random_color_variance, 0)
 	get_node("AsteroidMesh").get_surface_override_material(0).set_shader_parameter("color", color)
 
+	# sets random direction
+	direction = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
+
 
 func _process(delta):
-	position += Vector3.FORWARD * speed * delta;
+	position += direction * speed * delta;
 	rotate_z(delta * rotation_speed)
 
 

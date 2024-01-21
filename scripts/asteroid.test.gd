@@ -158,3 +158,13 @@ func test_asteroid_should_emit_signal_on_hit():
   for child in get_children():
     child.queue_free()
   await wait_frames(1)
+
+
+func test_asteroids_should_move_in_random_direction():
+  var asteroid1 = partial_double(Scene).instantiate()
+  var asteroid2 = partial_double(Scene).instantiate()
+  add_child(asteroid1)
+  add_child(asteroid2)
+  simulate(asteroid1, 2, 0.1)
+  simulate(asteroid2, 2, 0.1)
+  assert_not_same(asteroid1.global_position, asteroid2.global_position)
