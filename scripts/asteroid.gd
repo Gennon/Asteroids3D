@@ -1,21 +1,29 @@
 extends Area3D
 
-@export var speed := 5.0
-@export var rotation_speed := 0.5
 @export var explosion: PackedScene = load("res://scenes/explosion.tscn")
 
+@export_category("Configuration")
+@export var speed := 5.0
+@export var rotation_speed := 0.5
+@export var scale_factor := 0.2
+@export var color_factor := 0.2
+
 var scene := load("res://scenes/asteroid.tscn")
-
-
+var color = Color(0.3, 0.3, 0.3, 1)
 var is_big := true
-
+ 
 
 func _ready():
+	var scale_variance := Vector3(randf_range(-1, 1) * scale_factor, randf_range(-1, 1) * scale_factor, randf_range(-1, 1) * scale_factor)
 	if is_big:
-		scale = Vector3(2, 2, 2)
+		scale = Vector3(2, 2, 2) + scale_variance
 	else:
-		scale = Vector3(0.5, 0.5, 0.5)
+		scale = Vector3(0.5, 0.5, 0.5) + scale_variance
 
+	# Set shader color
+	var random_color_variance = randf_range(-1, 1) * color_factor
+	color += Color(random_color_variance, random_color_variance, random_color_variance, 0)
+	get_node("AsteroidMesh").get_surface_override_material(0).set_shader_parameter("color", color)
 
 
 func _process(delta):

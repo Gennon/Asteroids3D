@@ -14,7 +14,7 @@ noise = SubResource("FastNoiseLite_37f7b")
 render_priority = 0
 shader = ExtResource("2_cl7ni")
 shader_parameter/scale = Vector3(0.225, 0.44, 0.43)
-shader_parameter/color = Color(0.2, 0.2, 0.2, 1)
+shader_parameter/color = Color(0.3, 0.3, 0.3, 1)
 shader_parameter/noise = SubResource("NoiseTexture2D_tpbth")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nocp4"]

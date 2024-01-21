@@ -76,6 +76,14 @@ func test_big_astroid_has_larger_scale():
   assert_gt(asteroid_big.scale, asteroid_small.scale)
 
 
+func test_asteroids_has_random_scale():
+  var asteroid1 = partial_double(Scene).instantiate()
+  var asteroid2 = partial_double(Scene).instantiate()
+  add_child(asteroid1)
+  add_child(asteroid2)
+  assert_not_same(asteroid1.scale, asteroid2.scale)
+
+
 func test_big_asteroid_will_split_on_hit():
   var asteroid = partial_double(Scene).instantiate()
   add_child(asteroid)
@@ -132,3 +140,10 @@ func test_small_asteroid_will_instanciate_effect_on_hit():
   await wait_frames(2)
   assert_true(effect_found, "Effect found")
 	
+
+func test_asteroids_should_have_different_colors():
+  var asteroid1 = partial_double(Scene).instantiate()
+  var asteroid2 = partial_double(Scene).instantiate()
+  add_child(asteroid1)
+  add_child(asteroid2)
+  assert_not_same(asteroid1.color, asteroid2.color)
