@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgv1fj3c86s5r"]
+
+[ext_resource type="Script" path="res://scripts/screen_wrapper.gd" id="1_7gexx"]
+
+[node name="ScreenWrapper" type="Node3D"]
+script = ExtResource("1_7gexx")
