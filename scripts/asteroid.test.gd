@@ -5,10 +5,10 @@ var Scene = load("res://scenes/asteroid.tscn")
 
 func before_each():
   # Adds a camera that is always looking at the origin from above
-  var camera = partial_double(Camera3D).new()
-  add_child(camera)
+  var camera = add_child_autoqfree(Camera3D.new())
   camera.global_position = Vector3(0, 50, 0)
   camera.rotation_degrees = Vector3(-90, 0, 0)
+
 
 func test_asteroid_exists():
   var asteroid = double(Asteroid).new()
