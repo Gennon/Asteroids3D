@@ -19,6 +19,9 @@ jobs:
         with:
           lfs: true
 
+      - name: Setup Godot
+        run: godot --headless --import
+
       - name: Testing
         run: |
-          godot --headless --import -v -e --quit -s res://addons/gut/gut_cmdln.gd -gdir=res://scripts -gsuffix=.test.gd -gprefix=
+          godot --headless -v -e --quit -s res://addons/gut/gut_cmdln.gd -gdir=res://scripts -gsuffix=.test.gd -gprefix=
