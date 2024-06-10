@@ -1,2 +1,6 @@
 # Godot 4+ specific ignores
 .godot/
+
+
+# Visual Studio Code specific ignores
+.vscode/settings.json
