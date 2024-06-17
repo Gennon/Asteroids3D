@@ -12,6 +12,11 @@ func before_test():
   camera.rotation_degrees = Vector3(-90, 0, 0)
   add_child(camera)
 
+func after_test():
+  # Remove all nodes from the scene
+  for child in get_tree().get_nodes_in_group("asteroid"):
+    child.queue_free()
+
 
 func test_script_exists():
   var spawner = auto_free(__source.new())
