@@ -1,6 +1,6 @@
 extends Area3D
 
-signal destroyed
+signal destroyed()
 
 @export var explosion: PackedScene = load("res://scenes/explosion.tscn")
 
@@ -12,26 +12,30 @@ signal destroyed
 
 var scene := load("res://scenes/asteroid.tscn")
 var color = Color(0.3, 0.3, 0.3, 1)
-var is_big := true
 var direction := Vector3(0, 0, 0)
 var speed = 5.0
+var _is_big := true
+var is_big: bool:
+	set(value):
+		set_is_big(value)
+	get:
+		return _is_big
+
+func set_is_big(value: bool):
+	_is_big = value
+	var scale_variance := Vector3(
+		randf_range(-1, 1) * scale_factor, 
+		randf_range(-1, 1) * scale_factor, 
+		randf_range(-1, 1) * scale_factor)
+
+	scale = (Vector3(2, 2, 2) if is_big else Vector3(0.5, 0.5, 0.5)) + scale_variance
  
 
-func _ready():
-	var scale_variance := Vector3(randf_range(-1, 1) * scale_factor, randf_range(-1, 1) * scale_factor, randf_range(-1, 1) * scale_factor)
-	if is_big:
-		scale = Vector3(2, 2, 2) + scale_variance
-	else:
-		scale = Vector3(0.5, 0.5, 0.5) + scale_variance
-
-	# Set shader color
-	var random_color_variance = randf_range(-1, 1) * color_factor
-	color += Color(random_color_variance, random_color_variance, random_color_variance, 0)
-	get_node("AsteroidMesh").get_surface_override_material(0).set_shader_parameter("color", color)
-
+func _ready():	
+	# Set random size
+	set_is_big(is_big)
 	# sets random direction
 	direction = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
-
 	# sets random speed
 	speed = randf_range(speed_variation.x, speed_variation.y)
 
@@ -49,15 +53,14 @@ func hit():
 	spawn_explosion()
 	if is_big:
 		spawn_small_asteroids()
-		queue_free()
-	else:
-		queue_free()
+	queue_free()
 
 
-## Spawn explosion
+## Spawn explosion and star emmiter
 func spawn_explosion():
 	var explosion_instance = explosion.instantiate()
 	explosion_instance.position = position
+	explosion_instance.emitting = true
 	get_parent().add_child(explosion_instance)
 
 

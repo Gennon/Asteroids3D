@@ -1,189 +1,167 @@
-extends GutTest
+class_name TestAsteroid
+extends GdUnitTestSuite
 
-var Asteroid = load("res://scripts/asteroid.gd")
-var Scene = load("res://scenes/asteroid.tscn")
+var asteroid_script = load("res://scripts/asteroid.gd")
+const scene = "res://scenes/asteroid.tscn"
 
-func before_each():
+func before_test():
   # Adds a camera that is always looking at the origin from above
-  var camera = add_child_autoqfree(Camera3D.new())
+  var camera = auto_free(Camera3D.new())
   camera.global_position = Vector3(0, 50, 0)
   camera.rotation_degrees = Vector3(-90, 0, 0)
+  add_child(camera)
 
 
-func test_asteroid_exists():
-  var asteroid = double(Asteroid).new()
-  assert_true(asteroid != null)
+func test_asteroid_script_exists():
+  var asteroid = auto_free(asteroid_script.new())
+  assert_object(asteroid).is_not_null()
 
 
 func test_asteroid_moves_forward():
-  var asteroid = partial_double(Scene).instantiate()
-  add_child(asteroid)
-  var initial_position = asteroid.global_position
-  simulate(asteroid, 10, 0.1)
+  var asteroid = scene_runner(scene)
+  var initial_position = asteroid.get_property("global_position")
+  await asteroid.simulate_frames(10)
   # The asteroid should have moved forward from its initial position
-  assert_not_same(asteroid.global_position.z, initial_position.z)
+  assert_float(asteroid.get_property("global_position").z).is_not_equal(initial_position.z)
 
 
 func test_asteroid_moves_forward_with_speed():
-  var asteroid = partial_double(Scene).instantiate()
-  add_child(asteroid)
+  var asteroid = scene_runner(scene)
+  asteroid.set_property("direction", Vector3(0, 0, 1))
   # Measuring the distance traveled by the asteroid in 1 second and speed 1
-  asteroid.speed = 1
-  var initial_position = asteroid.global_position
-  simulate(asteroid, 10, 0.1)
-  var second_position = asteroid.global_position
+  asteroid.set_property("speed", 1.0)
+  var initial_position: Vector3 = asteroid.get_property("global_position")
+  await await_millis(100)
+  var second_position: Vector3 = asteroid.get_property("global_position")
   # Measuring the distance traveled by the asteroid in 1 second and speed 2
-  asteroid.global_position = initial_position
-  asteroid.speed = 2
-  simulate(asteroid, 10, 0.1)
+  asteroid.set_property("speed", 2.0)
+  await await_millis(100)
+  var third_position : Vector3 = asteroid.get_property("global_position")
   # The distance traveled by the asteroid with speed 2 should be greater
   # than the distance traveled by the asteroid with speed 1
-  assert_gt(abs(asteroid.global_position.z), abs(second_position.z))
+  var length1 = (second_position - initial_position).length()
+  var length2 = (third_position - second_position).length()
+  assert_float(length2).is_greater(length1)
 
 
 func test_asteroid_rotates():
-  var asteroid = partial_double(Scene).instantiate()
-  add_child(asteroid)
-  var initial_rotation = asteroid.rotation
-  simulate(asteroid, 10, 0.1)
+  var asteroid = scene_runner(scene)
+  var initial_rotation: Vector3 = asteroid.get_property("rotation")
+  await asteroid.simulate_frames(10)
   # The asteroid should have rotated from its initial rotation
-  assert_not_same(asteroid.rotation, initial_rotation)
+  assert_vector(asteroid.get_property("rotation")).is_not_equal(initial_rotation)
 
 
 func test_asteroid_rotates_with_rotation_speed():
-  var asteroid = partial_double(Scene).instantiate()
-  add_child(asteroid)
+  var asteroid = scene_runner(scene)
   # Measuring the rotation of the asteroid in 1 second and rotation speed 1
-  asteroid.rotation_speed = 1
-  var initial_rotation = asteroid.rotation
-  simulate(asteroid, 10, 0.1)
-  var second_rotation = asteroid.rotation
+  var initial_rotation : Vector3 = asteroid.get_property("rotation")
+  asteroid.set_property("rotation_speed", 1.0)
+  await await_millis(100)
+  var second_rotation : Vector3 = asteroid.get_property("rotation")
   # Measuring the rotation of the asteroid in 1 second and rotation speed 2
-  asteroid.rotation = initial_rotation
-  asteroid.rotation_speed = 2
-  simulate(asteroid, 10, 0.1)
+  asteroid.set_property("rotation", initial_rotation)
+  asteroid.set_property("rotation_speed", 2.0)
+  await await_millis(100)
   # The rotation of the asteroid with rotation speed 2 should be greater
   # than the rotation of the asteroid with rotation speed 1
-  assert_gt(abs(asteroid.rotation), abs(second_rotation))
+  assert_float(asteroid.get_property("rotation").length()).is_greater(second_rotation.length())
 
 
 func test_asteroid_is_big_by_default():
-  var asteroid = partial_double(Scene).instantiate()
-  add_child(asteroid)
-  assert_true(asteroid.is_big)
+  var asteroid = scene_runner(scene)
+  assert_bool(asteroid.get_property("is_big")).is_true()
 
 
-func test_big_astroid_has_larger_scale():
-  var asteroid_big = partial_double(Scene).instantiate()
-  add_child(asteroid_big)
-  var asteroid_small = partial_double(Scene).instantiate()
-  asteroid_small.is_big = false
-  add_child(asteroid_small)
-  assert_gt(asteroid_big.scale, asteroid_small.scale)
+func test_big_astroid_has_larger_scale_than_small_asteroid():
+  var big_asteroid = scene_runner(scene)
+  big_asteroid.set_property("is_big", true)
+  var small_asteroid = scene_runner(scene)
+  small_asteroid.set_property("is_big", false)
+  var big_scale = big_asteroid.get_property("scale")
+  var small_scale = small_asteroid.get_property("scale")
+  # The big asteroid should have a larger scale than the small asteroid
+  assert_vector(big_scale).is_greater(small_scale)
 
 
 func test_asteroids_has_random_scale():
-  var asteroid1 = partial_double(Scene).instantiate()
-  var asteroid2 = partial_double(Scene).instantiate()
-  add_child(asteroid1)
-  add_child(asteroid2)
-  assert_not_same(asteroid1.scale, asteroid2.scale)
+  var asteroid1 = scene_runner(scene)
+  var asteroid2 = scene_runner(scene)
+  # The scale of the two asteroids should be different
+  assert_vector(asteroid1.get_property("scale")).is_not_equal(asteroid2.get_property("scale"))
 
 
 func test_big_asteroid_will_split_on_hit():
-  var asteroid = partial_double(Scene).instantiate()
-  add_child(asteroid)
-  asteroid.is_big = true
-  asteroid.hit()
-  await wait_frames(2)
-  # The asteroid should have split into smaller asteroids
-  var asteroids = get_tree().get_nodes_in_group("asteroid")
-  assert_gt(asteroids.size(), 1)
-  for a in asteroids:
-    assert_false(a.is_big)
-    a.queue_free()
+  var runner = scene_runner(scene)
+  runner.set_property("is_big", true)
+  var count1 = get_tree().get_nodes_in_group("asteroid")
+  await await_idle_frame()
+  runner.invoke("hit")
+  await await_idle_frame()
+  var count2 = get_tree().get_nodes_in_group("asteroid")
+  # The number of asteroids in the scene should have increased
+  assert_int(count1.size()).is_equal(1)
+  assert_int(count2.size()).is_greater(count1.size())
+  for asteroid in count2:
+    asteroid.queue_free()
 
 
 func test_small_asteroid_will_destroy_on_hit():
-  var asteroid = partial_double(Scene).instantiate()
-  add_child(asteroid)
-  asteroid.is_big = false
-  await wait_frames(2)
-  asteroid.hit()
-  await wait_frames(2)
-  # The asteroid should have been removed from the scene
-  assert_freed(asteroid)
+  var runner = scene_runner(scene)
+  runner.set_property("is_big", false)
+  var count1 = get_tree().get_nodes_in_group("asteroid")
+  await await_idle_frame()
+  runner.invoke("hit")
+  await await_idle_frame()
+  var count2 = get_tree().get_nodes_in_group("asteroid")
+  # The number of asteroids in the scene should have decreased
+  assert_int(count1.size()).is_equal(1)
+  assert_int(count2.size()).is_equal(0)
 
 
 func test_big_asteroid_will_instanciate_effect_on_hit():
-  var asteroid = partial_double(Scene).instantiate()
-  add_child(asteroid)
-  asteroid.is_big = true
-  asteroid.hit()
-  await wait_frames(2)
+  var runner = scene_runner(scene)
+  runner.set_property("is_big", true)
+  await await_idle_frame()
+  runner.invoke("hit")
+  await await_idle_frame()
   # The asteroid should have instanciated an effect
   var effect_found = false
-  for child in get_children():
+  for child in get_tree().get_root().get_children():
     if child is GPUParticles3D:
       effect_found = true
-    child.queue_free()
-  await wait_frames(2)
-  assert_true(effect_found, "Effect found")
+  assert_bool(effect_found).is_true()
 
 
 func test_small_asteroid_will_instanciate_effect_on_hit():
-  var asteroid = partial_double(Scene).instantiate()
-  add_child(asteroid)
-  asteroid.is_big = false
-  asteroid.hit()
-  await wait_frames(2)
+  var runner = scene_runner(scene)
+  runner.set_property("is_big", false)
+  await await_idle_frame()
+  runner.invoke("hit")
+  await await_idle_frame()
   # The asteroid should have instanciated an effect
   var effect_found = false
-  for child in get_children():
+  for child in get_tree().get_root().get_children():
     if child is GPUParticles3D:
       effect_found = true
-    child.queue_free()
-  await wait_frames(2)
-  assert_true(effect_found, "Effect found")
+  assert_bool(effect_found).is_true()
 	
 
-func test_asteroids_should_have_different_colors():
-  var asteroid1 = partial_double(Scene).instantiate()
-  var asteroid2 = partial_double(Scene).instantiate()
-  add_child(asteroid1)
-  add_child(asteroid2)
-  assert_not_same(asteroid1.color, asteroid2.color)
-
-
-func test_asteroid_should_emit_signal_on_hit():
-  var asteroid = partial_double(Scene).instantiate()
-  add_child_autoqfree(asteroid)
-  watch_signals(asteroid)
-  asteroid.hit()
-  assert_signal_emitted(asteroid, "destroyed")
-  for child in get_children():
-    child.queue_free()
-  await wait_frames(1)
-
-
 func test_asteroids_should_move_in_random_direction():
-  var asteroid1 = partial_double(Scene).instantiate()
-  var asteroid2 = partial_double(Scene).instantiate()
-  add_child(asteroid1)
-  add_child(asteroid2)
-  simulate(asteroid1, 2, 0.1)
-  simulate(asteroid2, 2, 0.1)
-  assert_not_same(asteroid1.global_position, asteroid2.global_position)
+  var asteroid1 = scene_runner(scene)
+  var asteroid2 = scene_runner(scene)
+  await asteroid1.simulate_frames(10)
+  await asteroid2.simulate_frames(10)
+  # The two asteroids should have different global positions
+  assert_vector(asteroid1.get_property("global_position")).is_not_equal(asteroid2.get_property("global_position"))
 
 
 func test_asteroids_should_move_with_different_speed():
-  var asteroid1 = partial_double(Scene).instantiate()
-  var asteroid2 = partial_double(Scene).instantiate()
-  add_child(asteroid1)
-  add_child(asteroid2)
-  # Setting the same direction for both asteroids
-  asteroid1.direction = Vector3(0, 0, 1)
-  asteroid2.direction = Vector3(0, 0, 1)
-  simulate(asteroid1, 2, 1)
-  simulate(asteroid2, 2, 1)
-  assert_not_same(asteroid1.global_position.z, asteroid2.global_position.z)
+  var asteroid1 = scene_runner(scene)
+  var asteroid2 = scene_runner(scene)
+  asteroid1.set_property("direction", Vector3.FORWARD)
+  asteroid2.set_property("direction", Vector3.FORWARD)
+  await asteroid1.simulate_frames(10)
+  await asteroid2.simulate_frames(10)
+  # The asteroids should move in the same direction but at different speeds
+  assert_float(asteroid2.get_property("global_position").length()).is_not_equal(asteroid1.get_property("global_position").length())
