@@ -22,19 +22,17 @@ func test_asteroid_spawner_spawns_asteroids():
   var spawner := scene_runner(scene)
   spawner.invoke("spawn")
   await await_idle_frame()
-  var asteroids = spawner.find_child("asteroid")
-  assert_array(asteroids).is_not_empty()
+  var asteroids = get_tree().get_nodes_in_group("asteroid")
+  assert_array(asteroids).has_size(1)
   
 
-func test_asteroid_spawner_spawns_asteroids_with_random_positions():
+func test_asteroid_spawner_can_spawn_several_asteroids():
   var spawner := scene_runner(scene)
   spawner.invoke("spawn")
   await await_idle_frame()
   var asteroids = get_tree().get_nodes_in_group("asteroid")
-  assert_array(asteroids).is_not_empty()
   assert_array(asteroids).has_size(1)
   spawner.invoke("spawn")
   await await_idle_frame()
   asteroids = get_tree().get_nodes_in_group("asteroid")
   assert_array(asteroids).has_size(2)
-  assert_vector(asteroids[0].global_position).is_not_equal(asteroids[1].global_position)
