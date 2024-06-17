@@ -1,8 +1,10 @@
 extends Node3D
 
+var asteroid_scene = preload("res://scenes/asteroid.tscn")
+
 ## Spaws an asteroid at a random corner of the screen
 func spawn() -> void:
-	var asteroid = load("res://scenes/asteroid.tscn").instantiate()
+	var asteroid = asteroid_scene.instantiate()
 	add_child(asteroid)
 	asteroid.global_position = get_random_position()
 
