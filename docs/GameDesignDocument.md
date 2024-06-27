@@ -25,11 +25,11 @@ The player controls a spaceship and has to destroy asteroids and enemy spaceship
 The player can move the spaceship forward and backward and rotate it. The player can shoot bullets and missiles. The player can pause the game, restart and quit.
 The player can use the keyboard or a gamepad (need to verify using web export) to control the spaceship.
 
--   Forward: W, Up Arrow, Left Stick Up
--   Backward: S, Down Arrow, Left Stick Down
--   Rotate Left: A, Left Arrow, Left Stick Left
--   Rotate Right: D, Right Arrow, Left Stick Right
--   Shoot Bullets: Space, Right Trigger
+- Forward: W, Up Arrow, Left Stick Up
+- Backward: S, Down Arrow, Left Stick Down
+- Rotate Left: A, Left Arrow, Left Stick Left
+- Rotate Right: D, Right Arrow, Left Stick Right
+- Shoot Bullets: Space, Right Trigger
 
 ### Progression
 
@@ -45,8 +45,8 @@ Levels beyond level 3 should be similar to level 3 but with more asteroids and e
 
 Each level should have two different modes.
 
--   The first mode is a time limit mode where the player has to destroy all asteroids and enemy spaceships before the time runs out. The best time should be saved and displayed on the main menu.
--   The second mode is an endless mode where the player has to survive as long as possible and get the highest score. The player can get a higher score by destroying asteroids and enemy spaceships.
+- The first mode is a time limit mode where the player has to destroy all asteroids and enemy spaceships before the time runs out. The best time should be saved and displayed on the main menu.
+- The second mode is an endless mode where the player has to survive as long as possible and get the highest score. The player can get a higher score by destroying asteroids and enemy spaceships.
 
 If time permits then there should be a global leaderboard for both modes on all levels. That will be created in a different repository but communicated with the game using a REST API.
 
@@ -83,10 +83,10 @@ They should have a particle effect for the thruster and a shield.
 
 The game will take place in space. There should be different backgrounds for each level. The background should be some kind of effect that is moving. There could be elements like:
 
--   Stars
--   Nebula
--   Planets
--   Comets
+- Stars
+- Nebula
+- Planets
+- Comets
 
 ## Sound
 
@@ -96,34 +96,34 @@ All sounds will be credited to other people and under the CC0 or CC-BY licenses.
 
 We need to find music that fits the game. It should be something that is not too distracting but still fits the theme of the game. It should be something that can be looped and more modern than the original Asteroids music, but still have a retro feel to it.
 
--   [Space Shooter Music](https://opengameart.org/content/space-shooter-music)
+- [Space Shooter Music](https://opengameart.org/content/space-shooter-music)
 
 We need the following tracks:
 
--   Menu
--   Level 1
--   Level 2
--   Level 3
+- Menu
+- Level 1
+- Level 2
+- Level 3
 
 ### Sound Effects
 
--   [16-bit SFX](https://opengameart.org/content/sfx-the-ultimate-2017-16-bit-mini-pack)
+- [16-bit SFX](https://opengameart.org/content/sfx-the-ultimate-2017-16-bit-mini-pack)
 
 We need the following sound effects:
 
--   Spaceship Thruster
--   Spaceship Shooting (multiple)
--   Spaceship Explosion
--   Asteroid Explosion
--   Enemy Spaceship Explosion
--   Enemy Spaceship Shooting
--   Power-up Pickup
--   Game Over
--   Level Complete
--   Level Start
--   Menu Select
--   Menu Back
--   Menu Screen Change
+- Spaceship Thruster
+- Spaceship Shooting (multiple)
+- Spaceship Explosion
+- Asteroid Explosion
+- Enemy Spaceship Explosion
+- Enemy Spaceship Shooting
+- Power-up Pickup
+- Game Over
+- Level Complete
+- Level Start
+- Menu Select
+- Menu Back
+- Menu Screen Change
 
 ## Technical
 
@@ -133,7 +133,7 @@ This game will be released on Itch.io and will be playable in the browser and on
 
 ### Programming Language and Tools
 
-The game will make use of GDScript and the Godot Engine. The game will be developed in Godot 4.2.1 or later.
+The game will be made using GDScript and the Godot Engine. The game will be developed in Godot 4.2.2 or later.
 
 ### System Requirements
 
@@ -145,53 +145,43 @@ Basically a computer with modern browser like Chrome, Firefox, Edge, or Safari. 
 
 #### Level 1:
 
-January 31st 2024.
-
--   Main Menu
--   Level Select Menu
--   Level 1 with asteroids
--   Spaceship
--   Local leaderboard (best score and time)
--   The player has to destroy X amount of asteroids before the time runs out
--   Music and sound effects for menu and level 1
+- Main Menu
+- Level Select Menu
+- Level 1 with asteroids
+- Spaceship
+- Local leaderboard (best score and time)
+- The player has to destroy X amount of asteroids before the time runs out
+- Music and sound effects for menu and level 1
 
 #### Level 2:
 
-February 7th 2024.
-
--   Level 2 with asteroids and enemy spaceships
--   Enemy spaceships can shoot bullets
--   The player has to destroy X amount of asteroids and Y amount of enemy spaceships before the time runs out
--   Music and sound effects for level 2
+- Level 2 with asteroids and enemy spaceships
+- Enemy spaceships can shoot bullets
+- The player has to destroy X amount of asteroids and Y amount of enemy spaceships before the time runs out
+- Music and sound effects for level 2
 
 #### Level 3:
 
-February 14th 2024.
-
--   Level 3 with asteroids and enemy spaceships
--   Enemy spaceships can shoot bullets and has a shield
--   The player has to destroy X amount of asteroids and Y amount of enemy spaceships before the time runs out
--   Music and sound effects for level 3
+- Level 3 with asteroids and enemy spaceships
+- Enemy spaceships can shoot bullets and has a shield
+- The player has to destroy X amount of asteroids and Y amount of enemy spaceships before the time runs out
+- Music and sound effects for level 3
 
 #### Leaderboard:
 
-February 21st 2024.
+This might be scipped if the projects takes too long.
 
--   Global leaderboard for all levels and modes
--   Leaderboard Menu
--   Leaderboard API
--   Leaderboard UI
--   Music and sound effects for leaderboard
+- Global leaderboard for all levels and modes
+- Leaderboard Menu
+- Leaderboard API
+- Leaderboard UI
+- Music and sound effects for leaderboard
 
 #### Polish:
 
-February 28th 2024.
-
--   Polish the game
--   Publish the game on Itch.io using Godot CI Action
+- Polish the game
+- Publish the game on Itch.io using Godot CD Action
 
 ### Launch Date
 
-29th February 2024.
-
-This is a two month project. The first month will be used to develop the game and the second month will be used to test and polish the game. The game will be released on Itch.io.
+The game will be released when it is done. Whenever time permits me to finish it. The goal is to have a playable version on Itch.io by the end of the year 2024.
