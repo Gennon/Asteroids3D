@@ -32,7 +32,7 @@ So basically I tried setting up CI pipeline with Github and GUT as unit testing 
 - [Godot GUT CI](https://github.com/ceceppa/godot-gut-ci)
 
 The issue was that I couldn't get the unit tests to run. After some digging I found out that it was a common Godot issue due to the import files. There is a good description of why here: https://github.com/alessandrofama/fmod-for-godot/issues/23#issuecomment-1754475551
-With Godt 4.2.2 the issue was resolved, but GUT did not work with the new version. So I decided to use GdUnit4 instead. GdUnit4 also has a CI action that works perfectly. So now the CI pipeline is set up and runs the unit tests. 🎉
+With Godt 4.2.2 the issue was [resolved](https://godotengine.org/article/maintenance-release-godot-4-2-2-and-4-1-4/#improved-command-line-export-pipeline), but GUT did not work with the new version. So I decided to use GdUnit4 instead. GdUnit4 also has a [CI action](https://github.com/marketplace/actions/gdunit4-test-runner-action) that works perfectly. So now the CI pipeline is set up and runs the unit tests. 🎉
 
 ### CD
 
